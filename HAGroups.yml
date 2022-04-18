@@ -1,0 +1,86 @@
+#######################################
+# Groups
+#######################################
+
+#Some one is Home#
+  someone_home:
+    name: Someone is home
+    entities:
+      - device_tracker.masha_s_a5_2017
+      - device_tracker.pat_s_a5_2017
+    all: false  
+    
+#Everyone is Home#
+  everyone_home:
+    name: Everyone is home
+    entities:
+      - device_tracker.masha_s_a5_2017
+      - device_tracker.pat_s_a5_2017
+    all: true
+    
+#Group all Lights#    
+  away lights:
+   - switch.relay_01
+   - switch.relay_02
+   - switch.relay_03
+   - switch.relay_04
+   
+  relays:
+    name: Relays
+    entities:
+      - switch.relay_01
+      - switch.relay_02
+      - switch.relay_03
+      - switch.relay_04
+      - switch.relay_05
+      - switch.relay_06
+      - switch.relay_07
+      - switch.relay_08
+      - switch.relay_09
+      - switch.relay_10
+      - switch.relay_11
+      - switch.relay_12
+      - switch.relay_13
+      - switch.relay_14
+      - switch.relay_15
+      - switch.relay_16
+  digital_inputs:
+    name: Digital Inputs
+    entities:
+      - sensor.digital_input_1
+      - sensor.digital_input_2
+      - sensor.digital_input_3
+      - sensor.digital_input_4
+      - sensor.digital_input_5
+      - sensor.digital_input_6
+      - sensor.digital_input_7
+      - sensor.digital_input_8
+      - sensor.digital_input_9
+      - sensor.digital_input_10
+      - sensor.digital_input_12
+      - sensor.digital_input_13
+      - sensor.digital_input_14
+      - sensor.digital_input_15
+      - sensor.digital_input_16
+  analog_inputs:
+    name: Analog Inputs
+    entities:
+      - sensor.analog_input_1
+      - sensor.analog_input_2
+      - sensor.analog_input_3
+      - sensor.analog_input_4
+      - sensor.analog_input_5
+      - sensor.analog_input_6
+      - sensor.analog_input_7
+      - sensor.analog_input_8
+  temperature_inputs:
+    name: Temperature Inputs
+    entities:
+      - sensor.temperature_input_1
+      - sensor.temperature_input_2
+      - sensor.temperature_input_3
+      - sensor.temperature_input_4
+      - sensor.temperature_input_5
+      - sensor.temperature_input_6
+      - sensor.temperature_input_7
+      - sensor.temperature_input_8

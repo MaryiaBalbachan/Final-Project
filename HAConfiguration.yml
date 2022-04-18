@@ -1,0 +1,54 @@
+homeassistant:
+  name: Home
+  latitude: 52.165098
+  longitude: -6.977615
+  unit_system: metric
+  time_zone: Europe/Dublin
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+  
+# Include all other configuration files  
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+group: !include groups.yaml
+switch: !include switches.yaml
+sensor: !include sensors.yaml
+
+# Configure the router 
+huawei_lte:
+  - url: http://192.168.1.1/
+    username: admin
+    password: 11122003secure
+    
+# Add themes
+frontend:
+  themes:
+    happy:
+      primary-color: pink
+      text-primary-color: purple
+      mdc-theme-primary: plum
+    sad:
+      primary-color: steelblue
+      modes:
+        dark:
+          secondary-text-color: slategray
+    day_and_night:
+      primary-color: coral
+      modes:
+        light:
+          secondary-text-color: olive
+        dark:
+          secondary-text-color: slategray
+          
+# Configure the camera
+camera:
+  - platform: generic
+    scan_interval: 1
+    still_image_url: http://192.168.1.150/jpg/image.jpg
+    stream_source: rtsp://admin:123456@192.168.1.150:554/profile1

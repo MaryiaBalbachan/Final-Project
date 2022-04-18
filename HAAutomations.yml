@@ -1,0 +1,230 @@
+- id: '1643908984194'
+  alias: 1 Automatic snapshot
+  description: Backup
+  trigger:
+  - platform: time
+    at: 01:00:00
+  condition: []
+  action:
+  - service: hassio.snapshot_full
+  mode: single
+- id: '1648737986048'
+  alias: Alarm Button Helper
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.digital_input_1
+    below: '1'
+  - platform: numeric_state
+    entity_id: sensor.digital_input_2
+    below: '1'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.digital_input_3
+    above: '0'
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.alarm_reset
+    data: {}
+  mode: single
+- id: '1648742223704'
+  alias: Alarm Reset
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.alarm_reset
+    from: 'off'
+    to: 'on'
+    id: alarm-on
+  - platform: state
+    entity_id: input_boolean.alarm_reset
+    id: alarm-off
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: alarm-on
+      sequence:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.relay_12
+    - conditions:
+      - condition: trigger
+        id: alarm-off
+      sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.relay_12
+    default: []
+  mode: single
+- id: '1649509026469'
+  alias: Home/Away
+  description: ''
+  trigger:
+  - platform: state
+    from: 'off'
+    to: 'on'
+    id: away
+    entity_id: input_boolean.home_away
+  - platform: state
+    entity_id: input_boolean.home_away
+    from: 'on'
+    to: 'off'
+    id: home
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: away
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.relay_16
+      - service: script.turn_on
+        data: {}
+        target:
+          entity_id: script.random_away_lighting
+    - conditions:
+      - condition: trigger
+        id: home
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.relay_16
+      - service: script.turn_off
+        data: {}
+        target:
+          entity_id: script.random_away_lighting
+    default: []
+  mode: single
+- id: '1649509585286'
+  alias: Outside Lights
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  - platform: sun
+    event: sunrise
+    offset: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: sun
+        before: sunset
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.relay_09
+    - conditions:
+      - condition: sun
+        after: sunrise
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.relay_09
+    default: []
+  mode: single
+- id: '1649584589389'
+  alias: Bedroom Lights
+  description: ''
+  trigger: []
+  condition:
+  - condition: time
+    before: 09:00:00
+    after: 07:00:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: time
+    before: '11:00:00'
+    after: 09:00:00
+    weekday:
+    - sat
+    - sun
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.relay_04
+  mode: single
+- id: '1649586269978'
+  alias: Lights on when someone arrives home
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.someone_home
+    from: not_home
+    to: home
+  condition:
+  - condition: sun
+    after: sunset
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+      - switch.relay_01
+      - switch.relay_02
+      - switch.relay_03
+  - type: turn_on
+    device_id: c50b7a721fb1428412e5624072e73607
+    entity_id: remote.sony_bravia_tv
+    domain: remote
+  mode: single
+- id: '1650119352127'
+  alias: Kitchen Heating
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.temperature_input_1
+        below: '19.9'
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.relay_10
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.temperature_input_1
+        above: '23'
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.relay_10
+    default: []
+  mode: single
+- id: '1650190623167'
+  alias: Chicken House Heating
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.homestead_realfeel_temperature
+    below: '10'
+    id: heat_on
+  condition:
+  - condition: sun
+    after: sunset
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.chicken_coup_heater
+  mode: single
